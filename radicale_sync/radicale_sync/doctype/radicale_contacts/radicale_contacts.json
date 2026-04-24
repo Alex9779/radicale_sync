@@ -1,0 +1,221 @@
+{
+ "actions": [],
+ "autoname": "field:account_name",
+ "creation": "2026-04-24 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "enable",
+  "account_name",
+  "sb_server",
+  "server_host",
+  "port",
+  "use_ssl",
+  "verify_ssl",
+  "cb_server",
+  "carddav_path",
+  "sb_auth",
+  "username",
+  "password",
+  "cb_status",
+  "last_sync_on",
+  "sb_pull",
+  "pull_from_radicale",
+  "sb_push",
+  "push_to_radicale",
+  "on_remote_delete",
+  "on_remote_conflict",
+  "delete_on_remove",
+  "sb_advanced",
+  "sync_interval",
+  "sync_token"
+ ],
+ "fields": [
+  {
+   "default": "1",
+   "fieldname": "enable",
+   "fieldtype": "Check",
+   "label": "Enable",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "account_name",
+   "fieldtype": "Data",
+   "label": "Account Name",
+   "reqd": 1,
+   "in_list_view": 1,
+   "description": "A friendly name for this sync account."
+  },
+  {
+   "fieldname": "sb_server",
+   "fieldtype": "Section Break",
+   "label": "Server"
+  },
+  {
+   "fieldname": "server_host",
+   "fieldtype": "Data",
+   "label": "Host",
+   "reqd": 1,
+   "description": "Hostname or IP of the Radicale server, e.g. radicale.example.com or 192.168.1.10"
+  },
+  {
+   "fieldname": "port",
+   "fieldtype": "Int",
+   "label": "Port",
+   "default": "5232",
+   "reqd": 1
+  },
+  {
+   "fieldname": "use_ssl",
+   "fieldtype": "Check",
+   "label": "Use HTTPS",
+   "default": "0"
+  },
+  {
+   "fieldname": "verify_ssl",
+   "fieldtype": "Check",
+   "label": "Verify SSL Certificate",
+   "default": "1",
+   "depends_on": "use_ssl"
+  },
+  {
+   "fieldname": "cb_server",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "carddav_path",
+   "fieldtype": "Data",
+   "label": "CardDAV Path",
+   "description": "Path to the address book, e.g. /user/contacts/ \u2014 leave blank to auto-discover."
+  },
+  {
+   "fieldname": "sb_auth",
+   "fieldtype": "Section Break",
+   "label": "Authentication"
+  },
+  {
+   "fieldname": "username",
+   "fieldtype": "Data",
+   "label": "Username",
+   "reqd": 1
+  },
+  {
+   "fieldname": "password",
+   "fieldtype": "Password",
+   "label": "Password",
+   "reqd": 1
+  },
+  {
+   "fieldname": "cb_status",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "last_sync_on",
+   "fieldtype": "Datetime",
+   "label": "Last Sync On",
+   "read_only": 1
+  },
+  {
+   "fieldname": "sb_pull",
+   "fieldtype": "Section Break",
+   "label": "Pull from Radicale"
+  },
+  {
+   "default": "1",
+   "fieldname": "pull_from_radicale",
+   "fieldtype": "Check",
+   "label": "Pull from Radicale (CardDAV \u2192 ERPNext)"
+  },
+  {
+   "default": "1",
+   "fieldname": "push_to_radicale",
+   "fieldtype": "Check",
+   "label": "Push to Radicale (ERPNext \u2192 CardDAV)"
+  },
+  {
+   "fieldname": "sb_advanced",
+   "fieldtype": "Section Break",
+   "label": "Advanced"
+  },
+  {
+   "fieldname": "sync_interval",
+   "fieldtype": "Select",
+   "label": "Auto Sync Interval",
+   "options": "Every 15 Minutes\nHourly\nEvery 4 Hours\nDaily",
+   "default": "Hourly",
+   "depends_on": "enable",
+   "description": "How often to automatically pull and push contacts for this account."
+  },
+  {
+   "fieldname": "sync_token",
+   "fieldtype": "Small Text",
+   "hidden": 1,
+   "label": "Sync Token",
+   "read_only": 1
+  },
+  {
+   "fieldname": "on_remote_delete",
+   "fieldtype": "Select",
+   "label": "If Contact Deleted on Server",
+   "options": "Recreate on Server\nDelete Locally\nIgnore",
+   "default": "Recreate on Server",
+   "description": "What to do when a contact marked for push no longer exists on the server.",
+   "depends_on": "eval:doc.push_to_radicale == 1"
+  },
+  {
+   "fieldname": "on_remote_conflict",
+   "fieldtype": "Select",
+   "label": "If Contact Changed on Server",
+   "options": "Overwrite Remote\nSkip",
+   "default": "Overwrite Remote",
+   "description": "What to do when the server version was modified since the last push.",
+   "depends_on": "eval:doc.push_to_radicale == 1"
+  },
+  {
+   "fieldname": "sb_push",
+   "fieldtype": "Section Break",
+   "label": "Push to Radicale"
+  },
+  {
+   "fieldname": "delete_on_remove",
+   "fieldtype": "Check",
+   "label": "Delete from Server when Contact is Removed or Sync Disabled",
+   "default": "1",
+   "depends_on": "eval:doc.push_to_radicale == 1",
+   "description": "When a contact is deleted in ERPNext or its push sync is disabled, also delete it from the Radicale server."
+  }
+ ],
+ "links": [],
+ "modified": "2026-04-24 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Radicale Sync",
+ "name": "Radicale Contacts",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "All",
+   "share": 1,
+   "write": 1,
+   "if_owner": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

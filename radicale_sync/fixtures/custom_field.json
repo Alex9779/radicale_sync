@@ -1,0 +1,80 @@
+[
+  {
+    "name": "Contact-sync_with_radicale",
+    "doctype": "Custom Field",
+    "dt": "Contact",
+    "fieldname": "sync_with_radicale",
+    "fieldtype": "Check",
+    "label": "Sync with Radicale",
+    "default": "0",
+    "insert_after": "sync_with_google_contacts",
+    "module": "Radicale Sync"
+  },
+  {
+    "name": "Contact-radicale_section",
+    "doctype": "Custom Field",
+    "dt": "Contact",
+    "fieldname": "radicale_section",
+    "fieldtype": "Section Break",
+    "label": "Radicale Sync",
+    "insert_after": "pulled_from_google_contacts",
+    "depends_on": "eval:doc.sync_with_radicale == 1 || doc.pulled_from_radicale == 1",
+    "collapsible": 1,
+    "collapsed": 1,
+    "module": "Radicale Sync"
+  },
+  {
+    "name": "Contact-radicale_contacts",
+    "doctype": "Custom Field",
+    "dt": "Contact",
+    "fieldname": "radicale_contacts",
+    "fieldtype": "Link",
+    "label": "Radicale Address Book",
+    "options": "Radicale Contacts",
+    "no_copy": 1,
+    "insert_after": "radicale_section",
+    "depends_on": "eval:doc.sync_with_radicale == 1",
+    "mandatory_depends_on": "eval:doc.sync_with_radicale == 1",
+    "description": "Select the Radicale Contacts account whose address book this contact should be pushed to.",
+    "module": "Radicale Sync"
+  },
+  {
+    "name": "Contact-radicale_uid",
+    "doctype": "Custom Field",
+    "dt": "Contact",
+    "fieldname": "radicale_uid",
+    "fieldtype": "Data",
+    "label": "Radicale UID",
+    "hidden": 1,
+    "read_only": 1,
+    "no_copy": 1,
+    "insert_after": "radicale_contacts",
+    "module": "Radicale Sync"
+  },
+  {
+    "name": "Contact-radicale_etag",
+    "doctype": "Custom Field",
+    "dt": "Contact",
+    "fieldname": "radicale_etag",
+    "fieldtype": "Data",
+    "label": "Radicale ETag",
+    "hidden": 1,
+    "read_only": 1,
+    "no_copy": 1,
+    "insert_after": "radicale_uid",
+    "module": "Radicale Sync"
+  },
+  {
+    "name": "Contact-pulled_from_radicale",
+    "doctype": "Custom Field",
+    "dt": "Contact",
+    "fieldname": "pulled_from_radicale",
+    "fieldtype": "Check",
+    "label": "Pulled from Radicale",
+    "default": "0",
+    "hidden": 1,
+    "no_copy": 1,
+    "insert_after": "radicale_etag",
+    "module": "Radicale Sync"
+  }
+]
