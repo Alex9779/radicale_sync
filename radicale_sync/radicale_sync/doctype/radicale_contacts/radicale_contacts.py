@@ -499,6 +499,33 @@ def _get_contact_address(contact) -> dict | None:
     return frappe.db.get_value("Address", addr_name, address_fields, as_dict=True)
 
 
+def _get_company_from_links(contact) -> str | None:
+    """Return the company name from the contact's linked documents.
+
+    Checks each row in the contact's links table in order:
+    - Customer  → customer_name field
+    - Supplier  → supplier_name field
+    - Company   → name (the Company name is the document name)
+    Returns the first non-empty value found.
+    """
+    for link_row in contact.get("links") or []:
+        link_doctype = link_row.get("link_doctype")
+        link_name = link_row.get("link_name")
+        if not (link_doctype and link_name):
+            continue
+        if link_doctype == "Customer":
+            val = frappe.db.get_value("Customer", link_name, "customer_name")
+        elif link_doctype == "Supplier":
+            val = frappe.db.get_value("Supplier", link_name, "supplier_name")
+        elif link_doctype == "Company":
+            val = link_name
+        else:
+            continue
+        if val:
+            return str(val)
+    return None
+
+
 def _contact_to_vcard(contact, uid: str) -> str:
     """Render an ERPNext Contact as a vCard 3.0 string."""
     import vobject
@@ -546,8 +573,9 @@ def _contact_to_vcard(contact, uid: str) -> str:
             country=addr.get("country") or "",
         )
 
-    if contact.get("company_name"):
-        vcard.add("org").value = [contact.company_name]
+    org = contact.get("company_name") or _get_company_from_links(contact)
+    if org:
+        vcard.add("org").value = [org]
 
     return vcard.serialize()
 
