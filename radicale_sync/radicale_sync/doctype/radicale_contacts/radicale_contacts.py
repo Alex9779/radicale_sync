@@ -648,6 +648,7 @@ def _push_contact_event(doc):
         uid = doc.get("radicale_uid") or str(uuid.uuid4())
         if not doc.get("radicale_uid"):
             frappe.db.set_value("Contact", doc.name, "radicale_uid", uid)
+            doc.radicale_uid = uid  # keep in-memory doc in sync so on_update reuses the same UID
         vcard_str = _contact_to_vcard(doc, uid)
         resp = _put(session, urljoin(ab_url, f"{uid}.vcf"), vcard_str, "text/vcard; charset=utf-8")
         new_etag = resp.headers.get("ETag") or resp.headers.get("etag")
